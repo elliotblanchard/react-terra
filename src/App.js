@@ -53,7 +53,7 @@ function CameraTarget() {
   })
 
   return (
-    <mesh position={[0, 0.5, 0]} ref={ref}>
+    <mesh position={[-5, 0.5, -5]} ref={ref}>
       <boxBufferGeometry attach="geometry" args={[1, 1, 1]} />
       <meshNormalMaterial attach="material" />
     </mesh>
@@ -91,7 +91,7 @@ export default function App() {
       //   antialias: false,
       // }}       
       camera={{ 
-        near: 0.1, 
+        near: 0.01, 
         far: 1000, 
         position: [3, 3, 3], 
         zoom: 20, 
@@ -117,7 +117,7 @@ export default function App() {
       <CameraTarget />
       {mapElements.map((row,i) =>
             row.map((item,j) =>
-              <Box position={[((row.length/2)*-1)+i, item/2, ((row.length/2)*-1)+j]} size={[1,item,1]}/>
+              <Box position={[(row.length*-1)+i, item/2, (row.length*-1)+j]} size={[1,item,1]}/>
             )
         )}   
         {/* <Box position={[0, 0, 0]} size={[1,1,1]}/>            */}
