@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, MapControls, OrthographicCamera } from '@react-three/drei';
+import { useSpring, animated } from '@react-spring/three'
 import * as THREE from 'three';
 // import Post from "./Post";
 
@@ -12,23 +13,24 @@ function Box(props) {
   // console.log(props.size)
   // Set up state for the hovered and active state
   const [hovered, setHover] = useState(false)
-  const [active, setActive] = useState(false)
+  const { scale } = useSpring({ scale: hovered ? 1.5 : 1 })
+  // const [active, setActive] = useState(false)
   // Rotate mesh every frame, this is outside of React without overhead
   // useFrame(() => {
     // ref.current.rotation.x = ref.current.rotation.y += 0.01
   // })
   return (
-    <mesh castShadow receiveShadow
+    <animated.mesh castShadow receiveShadow
       {...props}
       ref={ref}
-      scale={active ? 1.5 : 1}
-      onClick={(e) => setActive(!active)}
+      scale={scale}
+      // onClick={(e) => setActive(!active)}
       onPointerOver={(e) => setHover(true)}
       onPointerOut={(e) => setHover(false)}>
       castShadow receiveShadow  
       <boxGeometry args={props.size} />
       <meshLambertMaterial color={hovered ? 'hotpink' : 'orange'} />
-    </mesh>
+    </animated.mesh>
   )
 }
 
