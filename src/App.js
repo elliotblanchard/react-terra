@@ -5,6 +5,12 @@ import { useSpring, animated } from '@react-spring/three'
 import * as THREE from 'three';
 // import Post from "./Post";
 
+/*
+  https://codesandbox.io/s/react-spring-animations-6hi1y?file=/src/Canvas.js
+  https://codesandbox.io/s/springy-boxes-jz9l97qn89
+
+*/
+
 const lookAtCubePosition = new THREE.Vector3()
 
 function Box(props) {
@@ -23,7 +29,7 @@ function Box(props) {
     <animated.mesh castShadow receiveShadow
       {...props}
       ref={ref}
-      scale={scale}
+      scale-y={scale}
       // onClick={(e) => setActive(!active)}
       onPointerOver={(e) => setHover(true)}
       onPointerOut={(e) => setHover(false)}>
@@ -81,7 +87,6 @@ export default function App() {
     return map;
   }
 
-  // setMapElements(initMap(10));
   // const lookAtCubePosition = new THREE.Vector3();
 
   return (
@@ -123,7 +128,7 @@ export default function App() {
         <CameraTarget />
         {mapElements.map((row,i) =>
               row.map((item,j) =>
-                <Box position={[(row.length*-1)+i, item/2, (row.length*-1)+j]} size={[1,item,1]}/>
+                <Box key={`${i}_${j}`} position={[(row.length*-1)+i, item/2, (row.length*-1)+j]} size={[1,item,1]}/>
               )
           )}   
           {/* <Box position={[0, 0, 0]} size={[1,1,1]}/>            */}
