@@ -6,9 +6,11 @@ import * as THREE from 'three';
 // import Post from "./Post";
 
 /*
+  https://codesandbox.io/s/worldgrid-0upfs
+  https://codesandbox.io/s/springy-boxes-forked-0upfs?file=/src/index.js
   https://codesandbox.io/s/react-spring-animations-6hi1y?file=/src/Canvas.js
+  https://react-spring.io/basics
   https://codesandbox.io/s/springy-boxes-jz9l97qn89
-
 */
 
 const lookAtCubePosition = new THREE.Vector3()
