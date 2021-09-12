@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, MapControls, OrthographicCamera } from '@react-three/drei';
+import { useSprings, a } from '@react-spring/three'
 import { useSpring, animated } from '@react-spring/three'
 import * as THREE from 'three';
 // import Post from "./Post";
@@ -70,6 +71,75 @@ function CameraTarget() {
   )
 }
 
+function Content() {
+  const numElements = 100
+  const blockSize = 10
+  const maxHeight = 4
+
+  const colors = ['#D98E04', '#F29544', '#F28241', '#F2B705']
+
+  const randomizeElements = (i, numElements, blockSize, maxHeight) => {
+    const getRandomInt = (max) => {
+      return Math.floor(Math.random() * max)
+    }
+
+    const r = getRandomInt(maxHeight)
+
+    return {
+      position: [(i % Math.sqrt(numElements)) * blockSize, (r * blockSize) / 2, Math.floor(i / Math.sqrt(numElements)) * blockSize],
+      color: colors[r],
+      scale: [1, 1 + r, 1],
+      rotation: [0, 0, 0]
+    }
+  }
+
+  const data = new Array(numElements).fill().map(() => {
+    return {
+      color: 'red',
+      args: [blockSize, blockSize, blockSize]
+    }
+  })
+
+  const [springs, set] = useSprings(numElements, (i) => ({
+    from: randomizeElements(i, numElements, blockSize, maxHeight),
+    ...randomizeElements(i, numElements, blockSize, maxHeight),
+    config: { mass: 2, tension: 1000, friction: 50 }
+  }))
+  // useEffect(() => void setInterval(() => set((i) => ({ ...randomizeElements(i, numElements, blockSize, maxHeight), delay: i * 40 })), 3000), [])
+
+  const doRandomize = () => {
+    set((i) => ({ ...randomizeElements(i, numElements, blockSize, maxHeight), delay: i * 10 }))
+  }
+
+  return data.map((d, index) => (
+    <a.mesh castShadow receiveShadow onClick={() => doRandomize()} key={index} {...springs[index]}>
+      <boxBufferGeometry attach="geometry" args={d.args} />
+      <a.meshStandardMaterial attach="material" color={springs[index].color} />
+    </a.mesh>
+  ))
+}
+
+function Lights() {
+  return (
+    <group>
+        <ambientLight intensity={0.5} />
+        <directionalLight
+          position={[100, 100, 50]}
+          angle={0.3}
+          intensity={2}
+          castShadow
+          shadow-mapSize-width={64}
+          shadow-mapSize-height={64}
+          shadow-camera-left={-10}
+          shadow-camera-right={10}
+          shadow-camera-top={10}
+          shadow-camera-bottom={-10}
+        />
+        <directionalLight position={[-50, -50, -25]} intensity={0.5} />
+    </group>
+  )
+}
+
 export default function App() {
 
   const [mapElements, setMapElements] = useState(Array(10).fill(Array(10).fill(1)))
@@ -93,7 +163,7 @@ export default function App() {
 
   return (
     <>
-      <div onClick={() => setMapElements(initMap(10))}>Randomize Grid</div>
+      {/* <div onClick={() => setMapElements(initMap(10))}>Randomize Grid</div> */}
       <Canvas 
         orthographic
         shadows
@@ -106,33 +176,21 @@ export default function App() {
         camera={{ 
           near: 0.01, 
           far: 1000, 
-          position: [3, 3, 3], 
-          zoom: 20, 
+          position: [100, 100, 100], 
+          zoom: 5, 
         }}>
         {/* <OrthographicCamera makeDefault position={[0, 0, 10]} zoom={40} /> */}
         <color attach="background" args={["#eee"]} />      
-        <ambientLight intensity={0.5} />
-        <directionalLight
-          position={[50, 50, 25]}
-          angle={0.3}
-          intensity={2}
-          castShadow
-          shadow-mapSize-width={64}
-          shadow-mapSize-height={64}
-          shadow-camera-left={-10}
-          shadow-camera-right={10}
-          shadow-camera-top={10}
-          shadow-camera-bottom={-10}
-        />
-        <directionalLight position={[-10, -10, -5]} intensity={0.5} />      
+        <Lights />
         {/* <spotLight castShadow position={[10, 10, 10]} angle={0.15} penumbra={1} /> */}
         {/* <pointLight position={[-10, -10, -10]} /> */}
         <CameraTarget />
-        {mapElements.map((row,i) =>
+        <Content />
+        {/* {mapElements.map((row,i) =>
               row.map((item,j) =>
                 <Box key={`${i}_${j}`} position={[(row.length*-1)+i, item/2, (row.length*-1)+j]} size={[1,item,1]}/>
               )
-          )}   
+          )}    */}
           {/* <Box position={[0, 0, 0]} size={[1,1,1]}/>            */}
         {/* <gridHelper /> */}
         <MapControls />   
