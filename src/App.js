@@ -85,16 +85,16 @@ function Lights() {
     <group>
         <ambientLight intensity={0.5} />
         <directionalLight
-          position={[100, 100, 50]}
-          angle={0.3}
+          position={[80, 60, 20]}
+          angle={-0.5}
           intensity={2}
           castShadow
           shadow-mapSize-width={64}
           shadow-mapSize-height={64}
-          shadow-camera-left={-10}
-          shadow-camera-right={10}
-          shadow-camera-top={10}
-          shadow-camera-bottom={-10}
+          shadow-camera-left={-100}
+          shadow-camera-right={100}
+          shadow-camera-top={100}
+          shadow-camera-bottom={-100}
         />
         <directionalLight position={[-50, -50, -25]} intensity={0.5} />
     </group>
