@@ -39,25 +39,36 @@ function CameraTarget() {
 }
 
 function Content() {
-  const numElements = 25 // must be 2**N+1 for Diamond Square
-  const blockSize = 10
-  const maxHeight = 5
+  const numElements = 25; // must be 2**N+1 for Diamond Square
+  const blockSize = 10;
+  const maxHeight = 5;
 
-  const colors = ['#D98E04', '#F29544', '#F28241', '#F2B705', '#F4f957']
+  const colors = ['#D98E04', '#F29544', '#F28241', '#F2B705', '#F4f957'];
 
-  const randomizeElements = (i, numElements, blockSize, maxHeight) => {
+  const calcPosition = (index, height) => {
+    // Helper function, returns correct position for a landscape element
+    // given a position index and a height
+    const position_x = (index % Math.sqrt(numElements)) * blockSize; 
+    const position_y = (height * blockSize) / 2;
+    const position_z = Math.floor(index / Math.sqrt(numElements)) * blockSize;
+
+    return [position_x, position_y, position_z];
+  }
+
+  const randomizeElement = (i, numElements, blockSize, maxHeight) => {
+    // Return random value for a landscape element
     const getRandomInt = (max) => {
-      return Math.floor(Math.random() * max)
-    }
+      return Math.floor(Math.random() * max);
+    };
 
-    const r = getRandomInt(maxHeight)
+    const r = getRandomInt(maxHeight);
 
     return {
-      position: [(i % Math.sqrt(numElements)) * blockSize, (r * blockSize) / 2, Math.floor(i / Math.sqrt(numElements)) * blockSize],
+      position: calcPosition(i,r),
       color: colors[r],
       scale: [1, 1 + r, 1],
       rotation: [0, 0, 0]
-    }
+    };
   }
 
   const data = new Array(numElements).fill().map(() => {
@@ -68,15 +79,15 @@ function Content() {
   })
 
   const [springs, set] = useSprings(numElements, (i) => ({
-    from: randomizeElements(i, numElements, blockSize, maxHeight),
-    ...randomizeElements(i, numElements, blockSize, maxHeight),
+    from: randomizeElement(i, numElements, blockSize, maxHeight),
+    ...randomizeElement(i, numElements, blockSize, maxHeight),
     config: { mass: 2, tension: 1000, friction: 50 }
   }))
-  // useEffect(() => void setInterval(() => set((i) => ({ ...randomizeElements(i, numElements, blockSize, maxHeight), delay: i * 40 })), 3000), [])
+  // useEffect(() => void setInterval(() => set((i) => ({ ...randomizeElement(i, numElements, blockSize, maxHeight), delay: i * 40 })), 3000), [])
 
   const doRandomize = () => {
     set((i) => ({ 
-      ...randomizeElements(i, numElements, blockSize, maxHeight), 
+      ...randomizeElement(i, numElements, blockSize, maxHeight), 
       delay: i * 5 
     }))
   }
@@ -84,12 +95,12 @@ function Content() {
   const doDiamondSquare = () => {
     // Diamond Square https://www.youtube.com/watch?v=4GuAV1PnurU
     const index = 9
-    const r = 10
+    const r = 5
     set.start(i => {
       if (index !== i) return // We're only interested in changing spring-data for the current spring
-      const position = [(i % Math.sqrt(numElements)) * blockSize, (r * blockSize) / 2, Math.floor(i / Math.sqrt(numElements)) * blockSize]
+      const position = calcPosition(i,r)
       const color = "#F00"
-      const scale = [1, r*2, 1]
+      const scale = [1, 1+r, 1]
       return {
         position,
         color,
