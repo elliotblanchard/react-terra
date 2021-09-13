@@ -83,12 +83,23 @@ function Content() {
 
   const doDiamondSquare = () => {
     // Diamond Square https://www.youtube.com/watch?v=4GuAV1PnurU
-    console.log(`>>>>>>>>>Springs length is: ${springs.length}, API length is: ${set.length}`)
-    springs[5] = randomizeElements(5, numElements, blockSize, maxHeight)
+    const index = 9
+    const r = 10
+    set.start(i => {
+      if (index !== i) return // We're only interested in changing spring-data for the current spring
+      const position = [(i % Math.sqrt(numElements)) * blockSize, (r * blockSize) / 2, Math.floor(i / Math.sqrt(numElements)) * blockSize]
+      const color = "#F00"
+      const scale = [1, r*2, 1]
+      return {
+        position,
+        color,
+        scale,
+      }
+    })    
   }
 
   return data.map((d, index) => (
-    <a.mesh castShadow receiveShadow onClick={() => doRandomize()} key={index} {...springs[index]}>
+    <a.mesh castShadow receiveShadow onClick={() => doDiamondSquare()} key={index} {...springs[index]}>
       <boxBufferGeometry attach="geometry" args={d.args} />
       <a.meshStandardMaterial attach="material" color={springs[index].color} />
     </a.mesh>
