@@ -130,10 +130,6 @@ function Content() {
 
   const doDiamondSquare = () => {
     // Diamond Square https://www.youtube.com/watch?v=4GuAV1PnurU
-    let heightMap = Array.from({ length: sideLength }, () => 
-      Array.from({ length: sideLength }, () => 1)
-    );
-
     // Step 1: Set 4 corners to random values
     const corners = [0,sideLength-1];
     corners.forEach((i) => {
