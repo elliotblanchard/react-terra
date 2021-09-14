@@ -40,14 +40,27 @@ function CameraTarget() {
 
 function Content() {
   const numElements = 25; // must be 2**N+1 for Diamond Square
+  const sideLength = Math.sqrt(numElements);
   const blockSize = 10;
   const maxHeight = 5;
 
   const colors = ['#D98E04', '#F29544', '#F28241', '#F2B705', '#F4f957'];
 
+  const TwoDimToOneDim = (x,y,sideLength) => {
+    /* 
+      Helper function
+      Converts a 2D coordinate (used by Diamond Step algo)
+      to a 1D coordinate (used by react-spring array)
+    */
+    return y * sideLength + x;
+  }
+
   const calcPosition = (index, height) => {
-    // Helper function, returns correct position for a landscape element
-    // given a position index and a height
+    /*
+      Helper function
+      Returns correct position for a landscape 
+      element given a position index and a height
+    */
     const position_x = (index % Math.sqrt(numElements)) * blockSize; 
     const position_y = (height * blockSize) / 2;
     const position_z = Math.floor(index / Math.sqrt(numElements)) * blockSize;
@@ -55,11 +68,16 @@ function Content() {
     return [position_x, position_y, position_z];
   }
 
+  const getRandomInt = (max) => {
+    /*
+      Helper function
+      Returns random integer between 0 and max
+    */    
+    return Math.floor(Math.random() * max);
+  };
+
   const randomizeElement = (i, numElements, blockSize, maxHeight) => {
     // Return random value for a landscape element
-    const getRandomInt = (max) => {
-      return Math.floor(Math.random() * max);
-    };
 
     const r = getRandomInt(maxHeight);
 
@@ -85,6 +103,24 @@ function Content() {
   }))
   // useEffect(() => void setInterval(() => set((i) => ({ ...randomizeElement(i, numElements, blockSize, maxHeight), delay: i * 40 })), 3000), [])
 
+  const setLandscapeElement = (index, height) => {
+    /*
+      Helper function
+      Sets the height and correct color of a single landscape element
+    */ 
+    set.start(i => {
+      if (index !== i) return // We're only interested in changing spring-data for the current spring
+      const position = calcPosition(i,height)
+      const color = "#F00"
+      const scale = [1, 1+height, 1]
+      return {
+        position,
+        color,
+        scale,
+      }
+    })      
+  }
+
   const doRandomize = () => {
     set((i) => ({ 
       ...randomizeElement(i, numElements, blockSize, maxHeight), 
@@ -94,19 +130,26 @@ function Content() {
 
   const doDiamondSquare = () => {
     // Diamond Square https://www.youtube.com/watch?v=4GuAV1PnurU
-    const index = 9
-    const r = 5
-    set.start(i => {
-      if (index !== i) return // We're only interested in changing spring-data for the current spring
-      const position = calcPosition(i,r)
-      const color = "#F00"
-      const scale = [1, 1+r, 1]
-      return {
-        position,
-        color,
-        scale,
-      }
-    })    
+    let heightMap = Array.from({ length: sideLength }, () => 
+      Array.from({ length: sideLength }, () => 1)
+    );
+
+    // Step 1: Set 4 corners to random values
+    const corners = [0,sideLength-1];
+    corners.forEach((i) => {
+      corners.forEach((j) => {
+        setLandscapeElement(
+          TwoDimToOneDim(i,j,sideLength),
+          getRandomInt(maxHeight)
+        );
+      })
+    });
+
+    // Step 2: Set initial conditions
+    let chunk_size = numElements-1;
+    let roughness = 2;
+
+    // Step 3: Main iterative loop
   }
 
   return data.map((d, index) => (
