@@ -5,6 +5,8 @@ import { useSprings, a } from '@react-spring/three'
 import * as THREE from 'three';
 
 /*
+  >>>> Invalid coords are being sent to the 2d->1d function
+  
   Map generation:
   - Diamond Square https://www.youtube.com/watch?v=4GuAV1PnurU
   - Perlin Worms https://www.youtube.com/watch?v=B8qarIAuE6M
@@ -52,6 +54,7 @@ function Content() {
       Converts a 2D coordinate (used by Diamond Step algo)
       to a 1D coordinate (used by react-spring array)
     */
+    if ((y * sideLength + x) > 25) console.log(`${x} ${y} ${sideLength}`);
     return y * sideLength + x;
   }
 
@@ -68,18 +71,18 @@ function Content() {
     return [position_x, position_y, position_z];
   }
 
-  const getRandomInt = (max) => {
+  const getRandomInt = (min,max) => {
     /*
       Helper function
-      Returns random integer between 0 and max
+      Returns random integer between min and max
     */    
-    return Math.floor(Math.random() * max);
+    return Math.floor(Math.random() * (max - min + 1) + min)
   };
 
   const randomizeElement = (i, numElements, blockSize, maxHeight) => {
     // Return random value for a landscape element
 
-    const r = getRandomInt(maxHeight);
+    const r = getRandomInt(0,maxHeight);
 
     return {
       position: calcPosition(i,r),
@@ -103,6 +106,10 @@ function Content() {
   }))
   // useEffect(() => void setInterval(() => set((i) => ({ ...randomizeElement(i, numElements, blockSize, maxHeight), delay: i * 40 })), 3000), [])
 
+  const getLandscapeElementHeight = (index) => {
+    return springs[index].scale.animation.fromValues[1];
+  }
+  
   const setLandscapeElement = (index, height) => {
     /*
       Helper function
@@ -121,6 +128,24 @@ function Content() {
     })      
   }
 
+  const getAverageValue = (coords) => {
+    /*
+      Helper function
+      Averages an array of x,y coordinates, discarding any out of range values
+    */   
+    let count = 0;
+    let total = 0;
+    coords.forEach((coord) => {
+      if((coord[0] >= 0) && (coord[0] <= sideLength) && (coord[1] >= 0) && (coord[1] <= sideLength)){
+        count += 1;
+        // console.log(`cords: ${coord} <<<<<<<<<<<<>>>>>>>>>> index: ${TwoDimToOneDim(coord[0],coord[1],sideLength)}`);
+        total += getLandscapeElementHeight(TwoDimToOneDim(coord[0],coord[1],sideLength));
+      }
+    });
+    return total / count;
+    //return 1;
+  }
+
   const doRandomize = () => {
     set((i) => ({ 
       ...randomizeElement(i, numElements, blockSize, maxHeight), 
@@ -129,23 +154,69 @@ function Content() {
   }
 
   const doDiamondSquare = () => {
-    // Diamond Square https://www.youtube.com/watch?v=4GuAV1PnurU
+    // Diamond Square Algo: https://www.youtube.com/watch?v=4GuAV1PnurU
+
+    const squareStep = (half) => {
+      for(let y = 0; y < sideLength; y += chunkSize) {
+        for(let x = 0; x < sideLength; x += chunkSize) {
+          const squareCoords = [
+            [x,y],
+            [x+chunkSize,y],
+            [x,y+chunkSize],
+            [x+chunkSize,y+chunkSize]
+          ];
+          let newHeight = getAverageValue(squareCoords) + getRandomInt(-1*roughness,roughness);
+          if (newHeight < 1) newHeight = 1;
+          setLandscapeElement(
+            TwoDimToOneDim(x+half,y+half,sideLength),
+            newHeight
+          );
+        };
+      };
+    };
+
+    const diamondStep = (half) => {
+      for(let y = 0; y <= sideLength; y += half) {
+        for(let x = ((y + half) % chunkSize); x <= sideLength; x += chunkSize) {
+          const diamondCoords = [
+            [x,y-half],
+            [x-half,y],
+            [x+half,y],
+            [x,y+half]
+          ];          
+          let newHeight = getAverageValue(diamondCoords) + getRandomInt(-1*roughness,roughness);
+          if (newHeight < 1) newHeight = 1;
+          setLandscapeElement(
+            TwoDimToOneDim(x,y,sideLength),
+            newHeight
+          );          
+        }
+      }
+    }
+    
     // Step 1: Set 4 corners to random values
     const corners = [0,sideLength-1];
-    corners.forEach((i) => {
-      corners.forEach((j) => {
+    corners.forEach((x) => {
+      corners.forEach((y) => {
         setLandscapeElement(
-          TwoDimToOneDim(i,j,sideLength),
-          getRandomInt(maxHeight)
+          TwoDimToOneDim(x,y,sideLength),
+          getRandomInt(0,maxHeight)
         );
       })
     });
 
     // Step 2: Set initial conditions
-    let chunk_size = numElements-1;
-    let roughness = 2;
+    let chunkSize = numElements-1;
+    let roughness = 2; // Random range added to values
 
     // Step 3: Main iterative loop
+    while(chunkSize > 1) {
+      const half = Math.floor(chunkSize / 2);
+      squareStep(half);
+      diamondStep(half);
+      chunkSize = Math.floor(chunkSize / 2);
+      roughness = Math.floor(roughness / 2); // Roughness decreases as we work on smaller chunks
+    }
   }
 
   return data.map((d, index) => (
