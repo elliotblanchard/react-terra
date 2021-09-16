@@ -48,7 +48,7 @@ function Content() {
 
   const colors = ['#D98E04', '#F29544', '#F28241', '#F2B705', '#F4f957'];
 
-  const TwoDimToOneDim = (x,y,sideLength) => {
+  const twoToOneD = (x,y) => {
     /* 
       Helper function
       Converts a 2D coordinate (used by Diamond Step algo)
@@ -138,8 +138,8 @@ function Content() {
     coords.forEach((coord) => {
       if((coord[0] >= 0) && (coord[0] <= sideLength) && (coord[1] >= 0) && (coord[1] <= sideLength)){
         count += 1;
-        // console.log(`cords: ${coord} <<<<<<<<<<<<>>>>>>>>>> index: ${TwoDimToOneDim(coord[0],coord[1],sideLength)}`);
-        total += getLandscapeElementHeight(TwoDimToOneDim(coord[0],coord[1],sideLength));
+        console.log(`cords: ${coord} <<<<<<<<<<<<>>>>>>>>>> index: ${twoToOneD(coord[0],coord[1])}`);
+        total += getLandscapeElementHeight(twoToOneD(coord[0],coord[1]));
       }
     });
     return total / count;
@@ -157,18 +157,20 @@ function Content() {
     // Diamond Square Algo: https://www.youtube.com/watch?v=4GuAV1PnurU
 
     const squareStep = (half) => {
-      for(let y = 0; y < sideLength; y += chunkSize) {
-        for(let x = 0; x < sideLength; x += chunkSize) {
+      for(let y = 0; y < sideLength-1; y += chunkSize) {
+        for(let x = 0; x < sideLength-1; x += chunkSize) {
           const squareCoords = [
             [x,y],
             [x+chunkSize,y],
             [x,y+chunkSize],
             [x+chunkSize,y+chunkSize]
           ];
-          let newHeight = getAverageValue(squareCoords) + getRandomInt(-1*roughness,roughness);
-          if (newHeight < 1) newHeight = 1;
+          // let newHeight = getAverageValue(squareCoords) + getRandomInt(-1*roughness,roughness);
+          // if (newHeight < 1) newHeight = 1;
+          let newHeight = 0.5;
+          console.log(`>>>>>>X: ${x} Y: ${y} Chunk size: ${chunkSize} Half: ${half} Setting: [${x+half},${y+half}]`);
           setLandscapeElement(
-            TwoDimToOneDim(x+half,y+half,sideLength),
+            twoToOneD(x+half,y+half),
             newHeight
           );
         };
@@ -184,10 +186,11 @@ function Content() {
             [x+half,y],
             [x,y+half]
           ];          
-          let newHeight = getAverageValue(diamondCoords) + getRandomInt(-1*roughness,roughness);
-          if (newHeight < 1) newHeight = 1;
+          // let newHeight = getAverageValue(diamondCoords) + getRandomInt(-1*roughness,roughness);
+          // if (newHeight < 1) newHeight = 1;
+          let newHeight = 0.5;
           setLandscapeElement(
-            TwoDimToOneDim(x,y,sideLength),
+            twoToOneD(x,y),
             newHeight
           );          
         }
@@ -199,21 +202,23 @@ function Content() {
     corners.forEach((x) => {
       corners.forEach((y) => {
         setLandscapeElement(
-          TwoDimToOneDim(x,y,sideLength),
-          getRandomInt(0,maxHeight)
-        );
-      })
+          twoToOneD(x,y),
+          // getRandomInt(0,maxHeight)
+          0.5
+        ); 
+      });
     });
 
     // Step 2: Set initial conditions
-    let chunkSize = numElements-1;
+    let chunkSize = sideLength-1;
     let roughness = 2; // Random range added to values
 
     // Step 3: Main iterative loop
-    while(chunkSize > 1) {
+    for (let i=0; i<2; i++) {
+    //while(chunkSize > 1) {
       const half = Math.floor(chunkSize / 2);
       squareStep(half);
-      diamondStep(half);
+      // diamondStep(half);
       chunkSize = Math.floor(chunkSize / 2);
       roughness = Math.floor(roughness / 2); // Roughness decreases as we work on smaller chunks
     }
