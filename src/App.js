@@ -144,7 +144,7 @@ function Content() {
         color,
         scale,
       }
-    })      
+    })         
   }
 
   const getAverageValue = (coords) => {
