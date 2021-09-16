@@ -79,10 +79,10 @@ function Content() {
     return Math.floor(Math.random() * (max - min + 1) + min)
   };
 
-  const randomizeElement = (i, numElements, blockSize, maxHeight) => {
+  const initElement = (i, numElements, blockSize, maxHeight) => {
     // Return random value for a landscape element
 
-    const r = getRandomInt(0,maxHeight);
+    const r = getRandomInt(0,0);
 
     return {
       position: calcPosition(i,r),
@@ -100,14 +100,32 @@ function Content() {
   })
 
   const [springs, set] = useSprings(numElements, (i) => ({
-    from: randomizeElement(i, numElements, blockSize, maxHeight),
-    ...randomizeElement(i, numElements, blockSize, maxHeight),
+    from: initElement(i, numElements, blockSize, maxHeight),
+    ...initElement(i, numElements, blockSize, maxHeight),
     config: { mass: 2, tension: 1000, friction: 50 }
   }))
   // useEffect(() => void setInterval(() => set((i) => ({ ...randomizeElement(i, numElements, blockSize, maxHeight), delay: i * 40 })), 3000), [])
 
-  const getLandscapeElementHeight = (index) => {
-    return springs[index].scale.animation.fromValues[1];
+  const getLandscapeHeight = (index) => {
+    /*
+      Helper function
+      Gets the height of a single landscape element + corrects undefined heights
+    */
+    if (springs[index].scale.animation.fromValues[1]) {
+      return springs[index].scale.animation.fromValues[1];
+    } else {
+      return 0;
+    }    
+  }
+
+  const getAllLandscapeHeights = () => {
+    /*
+      Debug function
+      Outputs heights of all landscape elements - used to check for undefined vals
+    */ 
+   for (let i=0; i < springs.length; i++) {     
+    console.log(`Index: ${i}, height: ${getLandscapeHeight(i)}`)
+   }
   }
   
   const setLandscapeElement = (index, height) => {
@@ -138,12 +156,12 @@ function Content() {
     coords.forEach((coord) => {
       if((coord[0] >= 0) && (coord[0] <= sideLength) && (coord[1] >= 0) && (coord[1] <= sideLength)){
         count += 1;
-        console.log(`cords: ${coord} <<<<<<<<<<<<>>>>>>>>>> index: ${twoToOneD(coord[0],coord[1])}`);
-        total += getLandscapeElementHeight(twoToOneD(coord[0],coord[1]));
+        total += getLandscapeHeight(twoToOneD(coord[0],coord[1]));
+        console.log(`cords: ${coord} height: ${getLandscapeHeight(twoToOneD(coord[0],coord[1]))}`);
       }
     });
+    console.log(`average: ${total/count}`)
     return total / count;
-    //return 1;
   }
 
   const doRandomize = () => {
@@ -165,9 +183,9 @@ function Content() {
             [x,y+chunkSize],
             [x+chunkSize,y+chunkSize]
           ];
-          // let newHeight = getAverageValue(squareCoords) + getRandomInt(-1*roughness,roughness);
-          // if (newHeight < 1) newHeight = 1;
-          let newHeight = 0.5;
+          let newHeight = getAverageValue(squareCoords) + getRandomInt(-1*roughness,roughness);
+          if (newHeight < 1) newHeight = 1;
+          // let newHeight = 0.5;
           console.log(`>>>>>>X: ${x} Y: ${y} Chunk size: ${chunkSize} Half: ${half} Setting: [${x+half},${y+half}]`);
           setLandscapeElement(
             twoToOneD(x+half,y+half),
@@ -197,14 +215,15 @@ function Content() {
       }
     }
     
+    // getAllLandscapeHeights();
+
     // Step 1: Set 4 corners to random values
     const corners = [0,sideLength-1];
     corners.forEach((x) => {
       corners.forEach((y) => {
         setLandscapeElement(
           twoToOneD(x,y),
-          // getRandomInt(0,maxHeight)
-          0.5
+          getRandomInt(1,maxHeight)
         ); 
       });
     });
@@ -214,11 +233,11 @@ function Content() {
     let roughness = 2; // Random range added to values
 
     // Step 3: Main iterative loop
-    for (let i=0; i<2; i++) {
+    for (let i=0; i<i; i++) {
     //while(chunkSize > 1) {
       const half = Math.floor(chunkSize / 2);
-      squareStep(half);
-      // diamondStep(half);
+      // squareStep(half);
+      diamondStep(half);
       chunkSize = Math.floor(chunkSize / 2);
       roughness = Math.floor(roughness / 2); // Roughness decreases as we work on smaller chunks
     }
