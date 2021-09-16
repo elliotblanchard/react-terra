@@ -234,7 +234,7 @@ function Content() {
 
     // Step 2: Set initial conditions
     let chunkSize = sideLength-1;
-    let roughness = 6; // Random range added to values
+    let roughness = 12; // Random range added to values
 
     // Step 3: Main iterative loop
     //for (let i=0; i<2; i++) {
