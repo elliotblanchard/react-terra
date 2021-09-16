@@ -41,11 +41,11 @@ function CameraTarget() {
 }
 
 function Content() {
-  const powOfTwo = 3; // must be int greater than 0
+  const powOfTwo = 4; // must be int greater than 0
   const sideLength = 2**powOfTwo+1; // side length must be 2**N+1 for Diamond Square
   const numElements = sideLength*sideLength; 
-  const blockSize = 10;
-  const maxHeight = 5;
+  const blockSize = 2;
+  const maxHeight = 12;
 
   const colors = ['#D98E04', '#F29544', '#F28241', '#F2B705', '#F4f957'];
 
@@ -55,7 +55,7 @@ function Content() {
       Converts a 2D coordinate (used by Diamond Step algo)
       to a 1D coordinate (used by react-spring array)
     */
-    if ((y * sideLength + x) > 25) console.log(`Illegal index: ${x} ${y} ${sideLength}`);
+    // if ((y * sideLength + x) > numElements) console.log(`Illegal index: x: ${x} y: ${y} side length: ${sideLength}`);
     return y * sideLength + x;
   }
 
@@ -112,8 +112,8 @@ function Content() {
       Helper function
       Gets the height of a single landscape element + corrects undefined heights
     */
-    if (springs[index].scale.animation.fromValues[1]) {
-      return springs[index].scale.animation.fromValues[1];
+    if (springs[index].scale.animation.toValues[1]) {
+      return springs[index].scale.animation.toValues[1];
     } else {
       return 0;
     }    
@@ -124,9 +124,9 @@ function Content() {
       Debug function
       Outputs heights of all landscape elements - used to check for undefined vals
     */ 
-   for (let i=0; i < springs.length; i++) {     
-    console.log(`Index: ${i}, height: ${getLandscapeHeight(i)}`)
-   }
+   // for (let i=0; i < springs.length; i++) {     
+   //  console.log(`Index: ${i}, height: ${getLandscapeHeight(i)}`)
+   // }
   }
   
   const setLandscapeElement = (index, height) => {
@@ -158,10 +158,10 @@ function Content() {
       if((coord[0] >= 0) && (coord[0] < sideLength) && (coord[1] >= 0) && (coord[1] < sideLength)){
         count += 1;
         total += getLandscapeHeight(twoToOneD(coord[0],coord[1]));
-        console.log(`cords: ${coord} height: ${getLandscapeHeight(twoToOneD(coord[0],coord[1]))}`);
+        // console.log(`cords: ${coord} height: ${getLandscapeHeight(twoToOneD(coord[0],coord[1]))}`);
       }
     });
-    console.log(`average: ${total/count}`)
+    // console.log(`average: ${total/count}`)
     return total / count;
   }
 
@@ -205,7 +205,7 @@ function Content() {
             [x+half,y],
             [x,y+half]
           ];          
-          console.log(`>>>>>>Setting: [${x},${y}]`);
+          // console.log(`>>>>>>Setting: [${x},${y}]`);
           let newHeight = Math.floor(getAverageValue(diamondCoords) + getRandomInt(-1*roughness,roughness));
           if (newHeight < 1) newHeight = 1;
           // let newHeight = 0.5;
@@ -230,9 +230,11 @@ function Content() {
       });
     });
 
+    // debugger;
+
     // Step 2: Set initial conditions
     let chunkSize = sideLength-1;
-    let roughness = 2; // Random range added to values
+    let roughness = 6; // Random range added to values
 
     // Step 3: Main iterative loop
     //for (let i=0; i<2; i++) {
@@ -242,9 +244,9 @@ function Content() {
       diamondStep(half);
       chunkSize = Math.floor(chunkSize / 2);
       roughness = Math.floor(roughness / 2); // Roughness decreases as we work on smaller chunks
-      console.log("++++++++++++++++++++++++");
-      console.log("++++++++++++++++++++++++");
-      console.log("++++++++++++++++++++++++");
+      // console.log("++++++++++++++++++++++++");
+      // console.log("++++++++++++++++++++++++");
+      // console.log("++++++++++++++++++++++++");
     }
   }
 
@@ -287,7 +289,7 @@ export default function App() {
           near: 0.01, 
           far: 1000, 
           position: [100, 100, 100], 
-          zoom: 5, 
+          zoom: 4, 
         }}>
         <color attach="background" args={["#eee"]} />      
         <Lights />
