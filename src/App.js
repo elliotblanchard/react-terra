@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { MapControls } from '@react-three/drei';
 import { useSprings, a } from '@react-spring/three'
@@ -46,7 +46,6 @@ function Content({initialRoughness}) {
   const numElements = sideLength*sideLength; 
   const blockSize = 3;
   const maxHeight = 12;
-
   const colors = ['#D98E04', '#F29544', '#F28241', '#F2B705', '#F4f957'];
 
   const twoToOneD = (x,y) => {
@@ -103,7 +102,7 @@ function Content({initialRoughness}) {
   const [springs, set] = useSprings(numElements, (i) => ({
     from: initElement(i, numElements, blockSize, maxHeight),
     ...initElement(i, numElements, blockSize, maxHeight),
-    config: { mass: 2, tension: 1000, friction: 50 }
+    config: { mass: 2, tension: 750, friction: 50 }
   }))
   // useEffect(() => void setInterval(() => set((i) => ({ ...randomizeElement(i, numElements, blockSize, maxHeight), delay: i * 40 })), 3000), [])
 
@@ -235,7 +234,6 @@ function Content({initialRoughness}) {
     // Step 2: Set initial conditions
     let chunkSize = sideLength-1;
     let roughness = initialRoughness; // Random range added to values
-    console.log(`Roughness is: ${roughness}`)
 
     // Step 3: Main iterative loop
     //for (let i=0; i<2; i++) {
@@ -250,7 +248,12 @@ function Content({initialRoughness}) {
       // console.log("++++++++++++++++++++++++");
     }
   }
-
+  
+  // This function will called only once
+  useEffect(() => {
+    doDiamondSquare();
+  }, [initialRoughness])
+  
   return data.map((d, index) => (
     <a.mesh castShadow receiveShadow onClick={() => doDiamondSquare()} key={index} {...springs[index]}>
       <boxBufferGeometry attach="geometry" args={d.args} />
@@ -281,8 +284,40 @@ function Lights() {
 }
 
 export default function App() {
+  const [state, setState] = useState({
+    // fname: "",
+    // lname: "",
+    // message: "",
+    // carBrand: "",
+    // isChecked: false,
+    // gender: "",
+    initialRoughness: 10,
+  });
+
+  const handleChange = (e) => {
+    const value =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    setState({
+      ...state,
+      [e.target.name]: value,
+    });
+  };  
+
   return (
     <>
+      <div>
+        <label>
+          Roughness (between 0 and 20): {state.initialRoughness}
+          <input
+            type="range"
+            name="initialRoughness"
+            min="0"
+            max="20"
+            value={state.initialRoughness}
+            onChange={handleChange}
+          />
+        </label>
+      </div>
       <Canvas 
         orthographic
         shadows      
@@ -290,12 +325,12 @@ export default function App() {
           near: 0.01, 
           far: 1000, 
           position: [100, 100, 100], 
-          zoom: 10, 
+          zoom: 7, 
         }}>
         <color attach="background" args={["#eee"]} />      
         <Lights />
         <CameraTarget />
-        <Content initialRoughness={12} />
+        <Content initialRoughness={state.initialRoughness} />
         <MapControls />   
       </Canvas>
     </>
