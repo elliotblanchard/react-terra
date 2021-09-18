@@ -40,12 +40,12 @@ function CameraTarget() {
   )
 }
 
-function Content({initialRoughness}) {
+function Content({initialRoughness,maxHeight}) {
   const powOfTwo = 4; // must be int greater than 0
   const sideLength = 2**powOfTwo+1; // side length must be 2**N+1 for Diamond Square
   const numElements = sideLength*sideLength; 
   const blockSize = 3;
-  const maxHeight = 12;
+  // const maxHeight = 12;
   const colors = ['#D98E04', '#F29544', '#F28241', '#F2B705', '#F4f957'];
 
   const twoToOneD = (x,y) => {
@@ -252,7 +252,7 @@ function Content({initialRoughness}) {
   // This function will called only once
   useEffect(() => {
     doDiamondSquare();
-  }, [initialRoughness])
+  }, [initialRoughness, maxHeight])
   
   return data.map((d, index) => (
     <a.mesh castShadow receiveShadow onClick={() => doDiamondSquare()} key={index} {...springs[index]}>
@@ -285,13 +285,8 @@ function Lights() {
 
 export default function App() {
   const [state, setState] = useState({
-    // fname: "",
-    // lname: "",
-    // message: "",
-    // carBrand: "",
-    // isChecked: false,
-    // gender: "",
     initialRoughness: 10,
+    maxHeight: 10,
   });
 
   const handleChange = (e) => {
@@ -317,6 +312,17 @@ export default function App() {
             onChange={handleChange}
           />
         </label>
+        <label>
+          Max Height (between 5 and 20): {state.maxHeight}
+          <input
+            type="range"
+            name="maxHeight"
+            min="5"
+            max="20"
+            value={state.maxHeight}
+            onChange={handleChange}
+          />
+        </label>        
       </div>
       <Canvas 
         orthographic
@@ -330,7 +336,10 @@ export default function App() {
         <color attach="background" args={["#eee"]} />      
         <Lights />
         <CameraTarget />
-        <Content initialRoughness={state.initialRoughness} />
+        <Content 
+          initialRoughness={state.initialRoughness} 
+          maxHeight={state.maxHeight} 
+        />
         <MapControls />   
       </Canvas>
     </>
