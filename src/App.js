@@ -45,8 +45,7 @@ function Content({initialRoughness, maxHeight, randomizeCount}) {
   const sideLength = 2**powOfTwo+1; // side length must be 2**N+1 for Diamond Square
   const numElements = sideLength*sideLength; 
   const blockSize = 3;
-  // const maxHeight = 12;
-  const colors = ['#D98E04', '#F29544', '#F28241', '#F2B705', '#F4f957'];
+  const colors = ['#1276B0', '#D98E04', '#F29544', '#F28241', '#F2B705', '#F4f957', '#F0F0EB'];
 
   const twoToOneD = (x,y) => {
     /* 
@@ -134,10 +133,20 @@ function Content({initialRoughness, maxHeight, randomizeCount}) {
       Sets the height and correct color of a single landscape element
     */ 
     set.start(i => {
-      if (index !== i) return // We're only interested in changing spring-data for the current spring
-      const position = calcPosition(i,height)
-      const color = "#F00"
-      const scale = [1, 1+height, 1]
+      if (index !== i) return; // We're only interested in changing spring-data for the current spring
+      let color = undefined;
+
+      if (height <= 1) { color = colors[0] }
+      else if (height <= 6) { color = colors[1] }
+      else if (height <= 12) { color = colors[2] }
+      else if (height <= 18) { color = colors[3] }
+      else if (height <= 24) { color = colors[4] }
+      else if (height <= 31) { color = colors[5] }
+      else { color = colors[6] };
+
+      const position = calcPosition(i,height);
+      // const color = colors[Math.round(colors.length*(height/(maxHeight+initialRoughness)))-1]
+      const scale = [1, 1+height, 1];
       return {
         position,
         color,
@@ -184,7 +193,7 @@ function Content({initialRoughness, maxHeight, randomizeCount}) {
             [x+chunkSize,y+chunkSize]
           ];
           let newHeight = Math.floor(getAverageValue(squareCoords) + getRandomInt(-1*roughness,roughness));
-          if (newHeight < 1) newHeight = 1;
+          if (newHeight < 3) newHeight = 1; // Makes water areas a bit bigger
           // let newHeight = 0.5;
           // console.log(`>>>>>>X: ${x} Y: ${y} Chunk size: ${chunkSize} Half: ${half} Setting: [${x+half},${y+half}]`);
           setLandscapeElement(
@@ -206,7 +215,7 @@ function Content({initialRoughness, maxHeight, randomizeCount}) {
           ];          
           // console.log(`>>>>>>Setting: [${x},${y}]`);
           let newHeight = Math.floor(getAverageValue(diamondCoords) + getRandomInt(-1*roughness,roughness));
-          if (newHeight < 1) newHeight = 1;
+          if (newHeight < 3) newHeight = 1; // Makes water areas a bit bigger
           // let newHeight = 0.5;
           setLandscapeElement(
             twoToOneD(x,y),
@@ -255,7 +264,7 @@ function Content({initialRoughness, maxHeight, randomizeCount}) {
   }, [initialRoughness, maxHeight, randomizeCount])
   
   return data.map((d, index) => (
-    <a.mesh castShadow receiveShadow onClick={() => doDiamondSquare()} key={index} {...springs[index]}>
+    <a.mesh castShadow receiveShadow key={index} {...springs[index]}>
       <boxBufferGeometry attach="geometry" args={d.args} />
       <a.meshStandardMaterial attach="material" color={springs[index].color} />
     </a.mesh>
