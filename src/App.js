@@ -40,7 +40,7 @@ function CameraTarget() {
   )
 }
 
-function Content({initialRoughness,maxHeight}) {
+function Content({initialRoughness, maxHeight, randomizeCount}) {
   const powOfTwo = 4; // must be int greater than 0
   const sideLength = 2**powOfTwo+1; // side length must be 2**N+1 for Diamond Square
   const numElements = sideLength*sideLength; 
@@ -252,7 +252,7 @@ function Content({initialRoughness,maxHeight}) {
   // This function will called only once
   useEffect(() => {
     doDiamondSquare();
-  }, [initialRoughness, maxHeight])
+  }, [initialRoughness, maxHeight, randomizeCount])
   
   return data.map((d, index) => (
     <a.mesh castShadow receiveShadow onClick={() => doDiamondSquare()} key={index} {...springs[index]}>
@@ -287,11 +287,16 @@ export default function App() {
   const [state, setState] = useState({
     initialRoughness: 10,
     maxHeight: 10,
+    randomizeCount: 0,
   });
 
   const handleChange = (e) => {
-    const value =
-      e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    let value = undefined;
+    if(e.target.type === 'submit') {
+      value = state[e.target.name] += 1;
+    } else {
+      value = e.target.value;
+    }
     setState({
       ...state,
       [e.target.name]: value,
@@ -322,7 +327,8 @@ export default function App() {
             value={state.maxHeight}
             onChange={handleChange}
           />
-        </label>        
+        </label>   
+        <button name="randomizeCount" onClick={handleChange}>Randomize</button>               
       </div>
       <Canvas 
         orthographic
@@ -338,7 +344,8 @@ export default function App() {
         <CameraTarget />
         <Content 
           initialRoughness={state.initialRoughness} 
-          maxHeight={state.maxHeight} 
+          maxHeight={state.maxHeight}
+          randomizeCount={state.randomizeCount} 
         />
         <MapControls />   
       </Canvas>
