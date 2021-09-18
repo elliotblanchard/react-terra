@@ -40,11 +40,11 @@ function CameraTarget() {
   )
 }
 
-function Content() {
+function Content({initialRoughness}) {
   const powOfTwo = 4; // must be int greater than 0
   const sideLength = 2**powOfTwo+1; // side length must be 2**N+1 for Diamond Square
   const numElements = sideLength*sideLength; 
-  const blockSize = 2;
+  const blockSize = 3;
   const maxHeight = 12;
 
   const colors = ['#D98E04', '#F29544', '#F28241', '#F2B705', '#F4f957'];
@@ -234,7 +234,8 @@ function Content() {
 
     // Step 2: Set initial conditions
     let chunkSize = sideLength-1;
-    let roughness = 12; // Random range added to values
+    let roughness = initialRoughness; // Random range added to values
+    console.log(`Roughness is: ${roughness}`)
 
     // Step 3: Main iterative loop
     //for (let i=0; i<2; i++) {
@@ -289,12 +290,12 @@ export default function App() {
           near: 0.01, 
           far: 1000, 
           position: [100, 100, 100], 
-          zoom: 4, 
+          zoom: 10, 
         }}>
         <color attach="background" args={["#eee"]} />      
         <Lights />
         <CameraTarget />
-        <Content />
+        <Content initialRoughness={12} />
         <MapControls />   
       </Canvas>
     </>
