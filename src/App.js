@@ -47,7 +47,7 @@ function Content({initialRoughness, maxHeight, randomizeCount}) {
   const sideLength = 2**powOfTwo+1; // side length must be 2**N+1 for Diamond Square
   const numElements = sideLength*sideLength; 
   const blockSize = 3;
-  const colors = ['hsl(202, 88%, 38%)', '#D98E04', '#F29544', '#F28241', '#F2B705', '#F4f957', '#F0F0EB'];
+  const colors = ['hsl(202, 88%, 38%)', 'hsl(39,96%,43%)', 'hsl(28,87%,61%)', 'hsl(22,87%,60%)', 'hsl(45,96%,48%)', 'hsl(62,93%,66%)', 'hsl(60,14%,93%)'];
 
   // hsl(202, 88%, 38%)
   // #1276B0
@@ -280,7 +280,7 @@ function Lights({timeOfDay}) {
    
   return (
     <group>
-        <ambientLight color={`#hsl(202, ${100 * (timeOfDay/100)}%, 38%)`} intensity={0.5 * (timeOfDay/100) + 0.1} />
+        <ambientLight intensity={0.5 * (timeOfDay/100)} />
         <directionalLight
           position={[((160 * (timeOfDay/100)) - 80), 60, ((40 * (timeOfDay/100)) - 20)]} // x=80 y=60 z=20
           // angle={timeOfDay} // -0.5
@@ -366,7 +366,13 @@ export default function App() {
           position: [100, 100, 100], 
           zoom: 7, 
         }}>
-        <color attach="background" args={["#eee"]} />      
+        <color 
+          attach="background" 
+          args={[`hsl(
+            ${Math.floor(45 * (state.timeOfDay/100))}, 
+            ${Math.floor(100 * (state.timeOfDay/100)+ 20)}%, 
+            ${Math.floor(90 * (state.timeOfDay/100) + 5)}%)`]} 
+        />      
         <Lights timeOfDay={state.timeOfDay} />
         <CameraTarget />
         <Content 
