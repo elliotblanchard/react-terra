@@ -5,12 +5,14 @@ import { useSprings, a } from '@react-spring/three'
 import * as THREE from 'three';
 
 /*
-  >>>> Invalid coords are being sent to the 2d->1d function
-  
   Map generation:
   - Diamond Square https://www.youtube.com/watch?v=4GuAV1PnurU
   - Perlin Worms https://www.youtube.com/watch?v=B8qarIAuE6M
   - Lazy Flood Fill Biomes https://www.youtube.com/watch?v=YS0MTrjxGbM
+
+  Vertex colors (for gradients): 
+  - https://codesandbox.io/s/8fo01?file=/src/index.js:2218-2222
+  - https://darrendev.blogspot.com/2016/03/gradients-in-threejs.html
 
   https://react-spring.io/hooks/use-springs
   https://codesandbox.io/s/worldgrid-0upfs
@@ -45,7 +47,10 @@ function Content({initialRoughness, maxHeight, randomizeCount}) {
   const sideLength = 2**powOfTwo+1; // side length must be 2**N+1 for Diamond Square
   const numElements = sideLength*sideLength; 
   const blockSize = 3;
-  const colors = ['#1276B0', '#D98E04', '#F29544', '#F28241', '#F2B705', '#F4f957', '#F0F0EB'];
+  const colors = ['hsl(202, 88%, 38%)', '#D98E04', '#F29544', '#F28241', '#F2B705', '#F4f957', '#F0F0EB'];
+
+  // hsl(202, 88%, 38%)
+  // #1276B0
 
   const twoToOneD = (x,y) => {
     /* 
@@ -258,7 +263,7 @@ function Content({initialRoughness, maxHeight, randomizeCount}) {
     }
   }
   
-  // This function will called only once
+  // Update when props change
   useEffect(() => {
     doDiamondSquare();
   }, [initialRoughness, maxHeight, randomizeCount])
@@ -271,23 +276,24 @@ function Content({initialRoughness, maxHeight, randomizeCount}) {
   ))
 }
 
-function Lights() {
+function Lights({timeOfDay}) {
+   
   return (
     <group>
-        <ambientLight intensity={0.5} />
+        <ambientLight color={`#hsl(202, ${100 * (timeOfDay/100)}%, 38%)`} intensity={0.5 * (timeOfDay/100) + 0.1} />
         <directionalLight
-          position={[80, 60, 20]}
-          angle={-0.5}
-          intensity={2}
+          position={[((160 * (timeOfDay/100)) - 80), 60, ((40 * (timeOfDay/100)) - 20)]} // x=80 y=60 z=20
+          // angle={timeOfDay} // -0.5
+          intensity={2.0 * (timeOfDay/100)}
           castShadow
-          shadow-mapSize-width={64}
-          shadow-mapSize-height={64}
-          shadow-camera-left={-100}
-          shadow-camera-right={100}
-          shadow-camera-top={100}
-          shadow-camera-bottom={-100}
+          shadow-mapSize-width={256}
+          shadow-mapSize-height={256}
+          shadow-camera-left={-200}
+          shadow-camera-right={200}
+          shadow-camera-top={200}
+          shadow-camera-bottom={-200}
         />
-        <directionalLight position={[-50, -50, -25]} intensity={0.5} />
+        <directionalLight position={[-50, -50, -25]} intensity={0.5 * (timeOfDay/100)} />
     </group>
   )
 }
@@ -297,6 +303,7 @@ export default function App() {
     initialRoughness: 10,
     maxHeight: 10,
     randomizeCount: 0,
+    timeOfDay: 100,
   });
 
   const handleChange = (e) => {
@@ -337,6 +344,17 @@ export default function App() {
             onChange={handleChange}
           />
         </label>   
+        <label>
+          Time: {state.timeOfDay}
+          <input
+            type="range"
+            name="timeOfDay"
+            min="1"
+            max="100"
+            value={state.timeOfDay}
+            onChange={handleChange}
+          />
+        </label>        
         <button name="randomizeCount" onClick={handleChange}>Randomize</button>               
       </div>
       <Canvas 
@@ -349,7 +367,7 @@ export default function App() {
           zoom: 7, 
         }}>
         <color attach="background" args={["#eee"]} />      
-        <Lights />
+        <Lights timeOfDay={state.timeOfDay} />
         <CameraTarget />
         <Content 
           initialRoughness={state.initialRoughness} 
