@@ -43,6 +43,7 @@ function CameraTarget() {
 }
 
 function Content({initialRoughness, maxHeight, randomizeCount}) {
+  const meshRef = useRef();
   const powOfTwo = 4; // must be int greater than 0
   const sideLength = 2**powOfTwo+1; // side length must be 2**N+1 for Diamond Square
   const numElements = sideLength*sideLength; 
@@ -266,12 +267,22 @@ function Content({initialRoughness, maxHeight, randomizeCount}) {
   // Update when props change
   useEffect(() => {
     doDiamondSquare();
+    // meshRef.current.scale.x = 100; // example of ref handle to mesh
+    meshRef.faces[0].vertexColors = [100,100,100];
   }, [initialRoughness, maxHeight, randomizeCount])
   
   return data.map((d, index) => (
-    <a.mesh castShadow receiveShadow key={index} {...springs[index]}>
+    <a.mesh castShadow receiveShadow ref={meshRef} key={index} {...springs[index]}>
+      {/* <boxGeometry args={[0.6, 0.6, 0.6]}>
+        <instancedBufferAttribute attachObject={['attributes', 'color']} args={[colorArray, 3]} />
+      </boxGeometry>
+      <meshPhongMaterial vertexColors={THREE.VertexColors} />       */}
+
       <boxBufferGeometry attach="geometry" args={d.args} />
-      <a.meshStandardMaterial attach="material" color={springs[index].color} />
+      <a.meshPhongMaterial attach="material" color={springs[index].color} />
+      
+      {/* <a.meshPhongMaterial attach="material" vertexColors={THREE.VertexColors} color={springs[index].color} /> */}
+      {/* <a.meshStandardMaterial attach="material" color={springs[index].color} /> */}
     </a.mesh>
   ))
 }
@@ -321,7 +332,7 @@ export default function App() {
 
   return (
     <>
-      <div>
+      <div className="overlay">
         <label>
           Roughness (between 0 and 20): {state.initialRoughness}
           <input
@@ -358,6 +369,7 @@ export default function App() {
         <button name="randomizeCount" onClick={handleChange}>Randomize</button>               
       </div>
       <Canvas 
+        className="canvas"
         orthographic
         shadows      
         camera={{ 
@@ -365,7 +377,8 @@ export default function App() {
           far: 1000, 
           position: [100, 100, 100], 
           zoom: 7, 
-        }}>
+        }}
+      >
         <color 
           attach="background" 
           args={[`hsl(
