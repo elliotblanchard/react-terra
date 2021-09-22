@@ -268,7 +268,7 @@ function Content({initialRoughness, maxHeight, randomizeCount}) {
   useEffect(() => {
     doDiamondSquare();
     // meshRef.current.scale.x = 100; // example of ref handle to mesh
-    meshRef.faces[0].vertexColors = [100,100,100];
+    // meshRef.faces[0].vertexColors = [100,100,100];
   }, [initialRoughness, maxHeight, randomizeCount])
   
   return data.map((d, index) => (
@@ -333,8 +333,8 @@ export default function App() {
   return (
     <>
       <div className="overlay">
-        <label>
-          Roughness (between 0 and 20): {state.initialRoughness}
+        <div className="menuItem">
+          <h1>Roughness</h1>
           <input
             type="range"
             name="initialRoughness"
@@ -343,9 +343,9 @@ export default function App() {
             value={state.initialRoughness}
             onChange={handleChange}
           />
-        </label>
-        <label>
-          Max Height (between 5 and 20): {state.maxHeight}
+        </div>
+        <div className="menuItem">
+          <h1>Height</h1>
           <input
             type="range"
             name="maxHeight"
@@ -353,10 +353,10 @@ export default function App() {
             max="20"
             value={state.maxHeight}
             onChange={handleChange}
-          />
-        </label>   
-        <label>
-          Time: {state.timeOfDay}
+          /> 
+        </div>
+        <div className="menuItem">         
+          <h1>Time</h1>
           <input
             type="range"
             name="timeOfDay"
@@ -364,9 +364,11 @@ export default function App() {
             max="100"
             value={state.timeOfDay}
             onChange={handleChange}
-          />
-        </label>        
-        <button name="randomizeCount" onClick={handleChange}>Randomize</button>               
+          /> 
+        </div>
+        <div className="menuItem">       
+          <button name="randomizeCount" onClick={handleChange}>Randomize</button>  
+        </div>             
       </div>
       <Canvas 
         className="canvas"
@@ -376,7 +378,7 @@ export default function App() {
           near: 0.01, 
           far: 1000, 
           position: [100, 100, 100], 
-          zoom: 7, 
+          zoom: 10, 
         }}
       >
         <color 
@@ -386,13 +388,15 @@ export default function App() {
             ${Math.floor(100 * (state.timeOfDay/100)+ 20)}%, 
             ${Math.floor(90 * (state.timeOfDay/100) + 5)}%)`]} 
         />      
-        <Lights timeOfDay={state.timeOfDay} />
         <CameraTarget />
-        <Content 
-          initialRoughness={state.initialRoughness} 
-          maxHeight={state.maxHeight}
-          randomizeCount={state.randomizeCount} 
-        />
+        <group rotation={[0,(0-(5-(5 * (state.timeOfDay/100)))),0]}>
+          <Lights timeOfDay={state.timeOfDay} />
+          <Content 
+            initialRoughness={state.initialRoughness} 
+            maxHeight={state.maxHeight}
+            randomizeCount={state.randomizeCount} 
+          />
+        </group>
         <MapControls />   
       </Canvas>
     </>
