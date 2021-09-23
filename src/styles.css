@@ -18,6 +18,20 @@ h1 {
   color: #684d29;
 }
 
+button {
+  -webkit-border-radius: 40;
+  -moz-border-radius: 40;
+  border-radius: 40px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 24px;
+  cursor: pointer;
+  color: #684d29;
+  padding: 10px 20px 10px 20px;
+  border: solid #684d29 3px;
+  background: transparent;
+  text-decoration: none;
+}
+
 .canvas {
   height: 100%;
 }

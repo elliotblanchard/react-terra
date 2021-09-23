@@ -370,6 +370,7 @@ export default function App() {
         <div className="menuItem">       
           <button name="randomizeCount" onClick={handleChange}>Randomize</button>  
         </div>             
+        <div>Add note about the Diamond Square technique as well as mouse camera controls.</div>
       </div>
       <Canvas 
         className="canvas"
