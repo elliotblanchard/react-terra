@@ -107,7 +107,11 @@ function Content({initialRoughness, maxHeight, randomizeCount}) {
   const [springs, set] = useSprings(numElements, (i) => ({
     from: initElement(i, numElements, blockSize, maxHeight),
     ...initElement(i, numElements, blockSize, maxHeight),
-    config: { mass: 2, tension: 750, friction: 50 }
+    config: { 
+      mass: 3.25, 
+      tension: 750, 
+      friction: 75,
+    }
   }))
   // useEffect(() => void setInterval(() => set((i) => ({ ...randomizeElement(i, numElements, blockSize, maxHeight), delay: i * 40 })), 3000), [])
 
