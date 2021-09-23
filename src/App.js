@@ -35,7 +35,7 @@ function CameraTarget() {
   })
 
   return (
-    <mesh position={[-5, 0.5, -5]} ref={ref}>
+    <mesh position={[0, 40, 0]} scale={[0, 0, 0]} ref={ref}>
       <boxBufferGeometry attach="geometry" args={[1, 1, 1]} />
       <meshNormalMaterial attach="material" />
     </mesh>
@@ -49,9 +49,6 @@ function Content({initialRoughness, maxHeight, randomizeCount}) {
   const numElements = sideLength*sideLength; 
   const blockSize = 3;
   const colors = ['hsl(202, 88%, 38%)', 'hsl(39,96%,43%)', 'hsl(28,87%,61%)', 'hsl(22,87%,60%)', 'hsl(45,96%,48%)', 'hsl(62,93%,66%)', 'hsl(60,14%,93%)'];
-
-  // hsl(202, 88%, 38%)
-  // #1276B0
 
   const twoToOneD = (x,y) => {
     /* 
@@ -69,9 +66,9 @@ function Content({initialRoughness, maxHeight, randomizeCount}) {
       Returns correct position for a landscape 
       element given a position index and a height
     */
-    const position_x = (index % Math.sqrt(numElements)) * blockSize; 
+    const position_x = ((index % Math.sqrt(numElements)) * blockSize) - ((blockSize*sideLength) / 2); 
     const position_y = (height * blockSize) / 2;
-    const position_z = Math.floor(index / Math.sqrt(numElements)) * blockSize;
+    const position_z = (Math.floor(index / Math.sqrt(numElements)) * blockSize) - ((blockSize*sideLength) / 2) ;
 
     return [position_x, position_y, position_z];
   }
@@ -382,7 +379,7 @@ export default function App() {
           near: 0.01, 
           far: 1000, 
           position: [100, 100, 100], 
-          zoom: 10, 
+          zoom: 10.5, 
         }}
       >
         <color 
@@ -393,7 +390,7 @@ export default function App() {
             ${Math.floor(90 * (state.timeOfDay/100) + 5)}%)`]} 
         />      
         <CameraTarget />
-        <group rotation={[0,(0-(5-(5 * (state.timeOfDay/100)))),0]}>
+        <group position={[0, -20, 0]} rotation={[0,(0-(5-(5 * (state.timeOfDay/100)))),0]}>
           <Lights timeOfDay={state.timeOfDay} />
           <Content 
             initialRoughness={state.initialRoughness} 
