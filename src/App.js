@@ -333,7 +333,7 @@ export default function App() {
 
   return (
     <>
-      <div className="overlay">
+      <div className="overlay" style={{filter: `brightness(${(2 - (1 * (state.timeOfDay/100)))})`}} >
         <div className="menuItem">
           <h1>Roughness</h1>
           <input
