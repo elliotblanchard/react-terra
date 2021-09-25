@@ -9,8 +9,6 @@ import Lights from './Lights';
 /*
   Map generation:
   - Diamond Square https://www.youtube.com/watch?v=4GuAV1PnurU
-  - Perlin Worms https://www.youtube.com/watch?v=B8qarIAuE6M
-  - Lazy Flood Fill Biomes https://www.youtube.com/watch?v=YS0MTrjxGbM
 
   Vertex colors (for gradients): 
   - https://codesandbox.io/s/8fo01?file=/src/index.js:2218-2222
@@ -25,18 +23,18 @@ import Lights from './Lights';
 */
 
 function CameraTarget() {
-  const lookAtCubePosition = new THREE.Vector3()
-  const ref = useRef()
+  const lookAtCubePosition = new THREE.Vector3();
+  const ref = useRef();
 
   useFrame((state) => {
-    lookAtCubePosition.x = ref.current.position.x
-    lookAtCubePosition.y = ref.current.position.y
-    lookAtCubePosition.z = ref.current.position.z  
-    state.camera.lookAt(lookAtCubePosition)
+    lookAtCubePosition.x = ref.current.position.x;
+    lookAtCubePosition.y = ref.current.position.y;
+    lookAtCubePosition.z = ref.current.position.z;  
+    state.camera.lookAt(lookAtCubePosition);
   })
 
   return (
-    <mesh position={[0, 40, 0]} scale={[0, 0, 0]} ref={ref}>
+    <mesh position={[0, 40, 0]} ref={ref} scale={[0, 0, 0]}>
       <boxBufferGeometry attach="geometry" args={[1, 1, 1]} />
       <meshNormalMaterial attach="material" />
     </mesh>
@@ -66,62 +64,62 @@ export default function App() {
 
   return (
     <>
-      <div className="overlay" style={{filter: `brightness(${(2 - (1 * (state.timeOfDay/100)))})`}} >
-        <div className="menuItem">
+      <div className='overlay' style={{filter: `brightness(${(2 - (1 * (state.timeOfDay/100)))})`}} >
+        <div className='menuItem'>
           <h1>Roughness</h1>
           <input
-            type="range"
-            name="initialRoughness"
-            min="0"
-            max="20"
-            value={state.initialRoughness}
+            max='20'
+            min='0'
+            name='initialRoughness'
             onChange={handleChange}
+            type='range'
+            value={state.initialRoughness}
           />
         </div>
-        <div className="menuItem">
+        <div className='menuItem'>
           <h1>Height</h1>
           <input
-            type="range"
-            name="maxHeight"
-            min="5"
-            max="20"
-            value={state.maxHeight}
+            max='20'
+            min='5'
+            name='maxHeight'
             onChange={handleChange}
+            type='range'
+            value={state.maxHeight}
           /> 
         </div>
         <div className="menuItem">         
           <h1>Time</h1>
           <input
-            type="range"
-            name="timeOfDay"
-            min="1"
-            max="100"
+            max='100' 
+            min='1'     
+            name='timeOfDay'       
+            onChange={handleChange}                                 
+            type='range'
             value={state.timeOfDay}
-            onChange={handleChange}
           /> 
         </div>
-        <div className="menuItem">       
-          <button name="randomizeCount" onClick={handleChange}>Randomize</button>  
+        <div className='menuItem'>       
+          <button name='randomizeCount' onClick={handleChange}>Randomize</button>  
         </div>             
         <div>Add note about the Diamond Square technique as well as mouse camera controls.</div>
       </div>
       <Canvas 
-        className="canvas"
+        className='canvas'
         orthographic
         shadows      
         camera={{ 
-          near: 0.01, 
-          far: 1000, 
+          far: 1000,
+          near: 0.01,  
           position: [100, 100, 100], 
           zoom: 10.5, 
         }}
       >
         <color 
-          attach="background" 
           args={[`hsl(
             ${Math.floor(45 * (state.timeOfDay/100))}, 
             ${Math.floor(100 * (state.timeOfDay/100)+ 20)}%, 
             ${Math.floor(90 * (state.timeOfDay/100) + 5)}%)`]} 
+          attach='background' 
         />      
         <CameraTarget />
         <group position={[0, -20, 0]} rotation={[0,(0-(5-(5 * (state.timeOfDay/100)))),0]}>
