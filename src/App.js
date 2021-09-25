@@ -3,6 +3,8 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { MapControls } from '@react-three/drei';
 import * as THREE from 'three';
 
+// import styles from './Terra.less';
+
 import Content from './Content';
 import Lights from './Lights';
 
@@ -22,7 +24,7 @@ import Lights from './Lights';
   https://codesandbox.io/s/springy-boxes-jz9l97qn89
 
   Todo
-  - Code cleanup
+  X Code cleanup
   - Less intead of css
   - Readme file
   - Fix type - add description
