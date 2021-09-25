@@ -4,7 +4,7 @@ import { MapControls } from '@react-three/drei';
 import * as THREE from 'three';
 
 import Content from './Content';
-import Lights from './Light';
+import Lights from './Lights';
 
 /*
   Map generation:

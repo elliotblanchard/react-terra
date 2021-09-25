@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useSprings, a } from '@react-spring/three';
+import PropTypes from 'prop-types';
 
 function Content({initialRoughness, maxHeight, randomizeCount}) {
     const meshRef = useRef();
@@ -245,6 +246,19 @@ function Content({initialRoughness, maxHeight, randomizeCount}) {
         {/* <a.meshStandardMaterial attach="material" color={springs[index].color} /> */}
       </a.mesh>
     ))
-  }
+}
 
-  export default Content;
+// Content({initialRoughness, maxHeight, randomizeCount})
+Content.propTypes = {
+    initialRoughness: PropTypes.number,
+    maxHeight: PropTypes.number,
+    randomizeCount: PropTypes.number,
+};
+
+Content.defaultProps = {
+    initialRoughness: 10,
+    maxHeight: 10,
+    randomizeCount: 0,
+};
+
+export default Content;

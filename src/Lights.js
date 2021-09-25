@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 function Lights({timeOfDay}) {
    
     return (
@@ -19,5 +21,13 @@ function Lights({timeOfDay}) {
       </group>
     )
   }
+
+Lights.propTypes = {
+  timeOfDay: PropTypes.number,
+};
+
+Lights.defaultProps = {
+  timeOfDay: 100,
+};
 
 export default Lights;
