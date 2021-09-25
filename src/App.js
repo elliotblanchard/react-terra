@@ -26,6 +26,7 @@ import Lights from './Lights';
   - Less intead of css
   - Readme file
   - Fix type - add description
+  - Host on Netlify
 */
 
 function CameraTarget() {
