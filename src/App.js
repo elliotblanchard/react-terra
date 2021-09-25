@@ -20,6 +20,12 @@ import Lights from './Lights';
   https://codesandbox.io/s/react-spring-animations-6hi1y?file=/src/Canvas.js
   https://react-spring.io/basics
   https://codesandbox.io/s/springy-boxes-jz9l97qn89
+
+  Todo
+  - Code cleanup
+  - Less intead of css
+  - Readme file
+  - Fix type - add description
 */
 
 function CameraTarget() {
