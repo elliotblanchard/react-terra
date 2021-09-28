@@ -13,12 +13,17 @@ body,
 }
 
 @media only screen and (max-width: 640px){
+  h1 {
+    font-size: 32pt;
+    margin: 2px 10px 2px 5px;
+  }
+
   header {
-    width: 95%; 
+    width: 98%; 
   }
 
   main {
-    width: 95%; 
+    width: 98%; 
   }
 
   p {
@@ -34,6 +39,16 @@ body,
   main {
     width: 400px; 
   }
+}
+
+.overlay {
+  display: flex;
+  flex: 1;  
+  flex-direction: column;
+  height: 100%;
+  left: 10px;  
+  position: absolute; 
+  z-index: 2;
 }
 
 button {
@@ -165,15 +180,6 @@ input[type=range]:focus::-ms-fill-upper {
   align-items: center;
   display: flex;
   flex-wrap: nowrap;
-}
-
-.overlay {
-  display: flex;
-  flex: 1;  
-  flex-direction: column;
-  left: 10px;  
-  position: absolute; 
-  z-index: 2;
 }
 
 p {
