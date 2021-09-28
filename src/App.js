@@ -68,9 +68,10 @@ export default function App() {
     <>
       <div className='overlay' style={{filter: `brightness(${(2 - (1 * (state.timeOfDay/100)))})`}} >
         <header>
-          <h1>Procedural Terrain</h1>
+          <h1>React Terrain</h1>
           <p>The diamond-square - also known as cloud or plasma fractal algorithm - was first introduced by Fournier, Fussell and Carpenter at SIGGRAPH 1982</p>
           <p>Adjust the sliders to change seed values. Use the mouse to zoom or rotate the landscape. Randomize to generate a new terrain.</p>
+          <p>Built with React + React Three Fiber</p>
         </header>
         <main>
           <div className='menuItem'>
