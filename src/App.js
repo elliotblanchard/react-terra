@@ -22,13 +22,6 @@ import Lights from './Lights';
   https://codesandbox.io/s/react-spring-animations-6hi1y?file=/src/Canvas.js
   https://react-spring.io/basics
   https://codesandbox.io/s/springy-boxes-jz9l97qn89
-
-  Todo
-  X Code cleanup
-  - Less intead of css
-  - Readme file
-  - Fix type - add description
-  - Host on Netlify
 */
 
 function CameraTarget() {
@@ -74,43 +67,49 @@ export default function App() {
   return (
     <>
       <div className='overlay' style={{filter: `brightness(${(2 - (1 * (state.timeOfDay/100)))})`}} >
-        <div className='menuItem'>
-          <h1>Roughness</h1>
-          <input
-            max='20'
-            min='0'
-            name='initialRoughness'
-            onChange={handleChange}
-            type='range'
-            value={state.initialRoughness}
-          />
-        </div>
-        <div className='menuItem'>
-          <h1>Height</h1>
-          <input
-            max='20'
-            min='5'
-            name='maxHeight'
-            onChange={handleChange}
-            type='range'
-            value={state.maxHeight}
-          /> 
-        </div>
-        <div className="menuItem">         
-          <h1>Time</h1>
-          <input
-            max='100' 
-            min='1'     
-            name='timeOfDay'       
-            onChange={handleChange}                                 
-            type='range'
-            value={state.timeOfDay}
-          /> 
-        </div>
-        <div className='menuItem'>       
-          <button name='randomizeCount' onClick={handleChange}>Randomize</button>  
-        </div>             
-        <div>Add note about the Diamond Square technique as well as mouse camera controls.</div>
+        <header>
+          <h1>Procedural Terrain</h1>
+          <p>The diamond-square - also known as cloud or plasma fractal algorithm - was first introduced by Fournier, Fussell and Carpenter at SIGGRAPH 1982</p>
+          <p>Adjust the sliders to change seed values. Use the mouse to zoom or rotate the landscape. Randomize to generate a new terrain.</p>
+        </header>
+        <main>
+          <div className='menuItem'>
+            <h2>Roughness</h2>
+            <input
+              max='20'
+              min='0'
+              name='initialRoughness'
+              onChange={handleChange}
+              type='range'
+              value={state.initialRoughness}
+            />
+          </div>
+          <div className='menuItem'>
+            <h2>Height</h2>
+            <input
+              max='20'
+              min='5'
+              name='maxHeight'
+              onChange={handleChange}
+              type='range'
+              value={state.maxHeight}
+            /> 
+          </div>
+          <div className="menuItem">         
+            <h2>Time</h2>
+            <input
+              max='100' 
+              min='1'     
+              name='timeOfDay'       
+              onChange={handleChange}                                 
+              type='range'
+              value={state.timeOfDay}
+            /> 
+          </div>
+          <div className='menuItem'>       
+            <button name='randomizeCount' onClick={handleChange}>Randomize</button>  
+          </div>   
+        </main>          
       </div>
       <Canvas 
         className='canvas'

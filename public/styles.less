@@ -1,37 +1,148 @@
 @button-radius: 40px;
 @dark-brown: #684d29;
+@thumb-radius: 20px;
+@track-radius: 8px;
 
-button {
-    -webkit-border-radius: @button-radius;
-    -moz-border-radius: @button-radius;
-    border-radius: @button-radius;
-    font-family: 'Raleway', sans-serif;
-    font-size: 24px;
-    cursor: pointer;
-    color: @dark-brown;
-    padding: 10px 20px 10px 20px;
-    border: solid @dark-brown 3px;
-    background: transparent;
-    text-decoration: none;
+html,
+body,
+#root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-h1 {
-    font-family: 'Raleway', sans-serif;
-    font-size: 32pt;
-    margin: 3px 10px 3px 5px;
+button {
+    background: transparent;
+    border: solid @dark-brown 3px;  
+    border-radius: @button-radius;
     color: @dark-brown;
+    cursor: pointer;    
+    font-family: 'Lato', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    margin: 10px 5px 10px 5px;
+    padding: 7px 12px 7px 12px;    
+    -moz-border-radius: @button-radius;
+    -webkit-border-radius: @button-radius;
+    text-decoration: none;
 }
 
 .canvas {
   height: 100%;
 }
 
-.overlay {
-  position: absolute;
-  left: 10px;
-  z-index: 2;
-  flex: 1;
-  width: 500px;
+h1 {
+    color: @dark-brown;  
+    font-family: 'Raleway', sans-serif;
+    font-size: 36pt;
+    margin: 3px 10px 3px 5px;
+}
+
+h2 {
+  color: @dark-brown;  
+  font-family: 'Lato', sans-serif;
+  font-size: 18;
+  font-weight: 400;
+  margin: 2px 5px 3px 5px;
+}
+
+header {
+  width: 460px; 
+}
+
+input[type=range] {
+  background: transparent;
+  height: 20px;
+  margin: 10px 0;
+  width: 100%;
+  -webkit-appearance: none;  
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  animate: 0.2s;  
+  border: 1px solid @dark-brown; 
+  border-radius: 4px; 
+  cursor: pointer;  
+  height: 2px;  
+  width: 100%;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  background: white;  
+  border: 1px solid @dark-brown;
+  border-radius: @thumb-radius;
+  cursor: pointer; 
+  margin-top: -10px;     
+  height: @thumb-radius;
+  width: @thumb-radius;
+  -webkit-appearance: none;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #3071A9;
+}
+
+input[type=range]::-moz-range-track {
+  animate: 0.2s;
+  border: 1px solid @dark-brown;   
+  border-radius: 4px;  
+  cursor: pointer;  
+  height: 1px;   
+  width: 100%;
+}
+
+input[type=range]::-moz-range-thumb {
+  border: 1px solid @dark-brown;
+  border-radius: @thumb-radius; 
+  cursor: pointer;   
+  height: @thumb-radius;
+  width: @thumb-radius;
+}
+
+input[type=range]::-ms-track {
+  animate: 0.2s;  
+  background: transparent;
+  border-color: transparent; 
+  color: transparent;   
+  cursor: pointer;
+  height: 1px;    
+  width: 100%;
+}
+
+input[type=range]::-ms-fill-lower {
+  border: 1px solid @dark-brown;
+  border-radius: @track-radius;
+}
+
+input[type=range]::-ms-fill-upper {
+  border: 1px solid @dark-brown;
+  border-radius: @track-radius;
+}
+
+input[type=range]::-ms-thumb {
+  border: 1px solid @dark-brown;  
+  border-radius: @thumb-radius;
+  cursor: pointer;
+  height: @thumb-radius;
+  margin-top: 1px;
+  width: @thumb-radius;
+}
+
+input[type=range]:focus::-ms-fill-lower {
+  background: black;
+}
+
+input[type=range]:focus::-ms-fill-upper {
+  background: black;
+}
+
+main {
+  width: 450px; 
 }
 
 .menuItem {
@@ -40,90 +151,21 @@ h1 {
   flex-wrap: nowrap;
 }
 
-input[type=range] {
-  height: 37px;
-  -webkit-appearance: none;
-  margin: 10px 0;
-  width: 100%;
-  background: transparent;
-}
-input[type=range]:focus {
-  outline: none;
-}
-input[type=range]::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 2px;
-  cursor: pointer;
-  animate: 0.2s;
-  border-radius: 4px;
-  border: 1px solid @dark-brown;
-}
-input[type=range]::-webkit-slider-thumb {
-  border: 1px solid @dark-brown;
-  background: white;
-  height: 20px;
-  width: 20px;
-  border-radius: 20px;
-  cursor: pointer;
-  -webkit-appearance: none;
-  margin-top: -10px;
+.overlay {
+  display: flex;
+  flex: 1;  
+  flex-direction: column;
+  left: 10px;  
+  position: absolute; 
+  z-index: 2;
 }
 
-input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #3071A9;
+p {
+  color: @dark-brown;  
+  font-family: 'Lato', sans-serif;
+  font-size: 15px;
+  margin: 10px 5px 10px 5px;
 }
 
-input[type=range]::-moz-range-track {
-  width: 100%;
-  height: 1px;
-  cursor: pointer;
-  animate: 0.2s;
-  border-radius: 4px;
-  border: 1px solid @dark-brown;
-}
-input[type=range]::-moz-range-thumb {
-  border: 1px solid @dark-brown;
-  height: 20px;
-  width: 20px;
-  border-radius: 20px;
-  cursor: pointer;
-}
-
-input[type=range]::-ms-track {
-  width: 100%;
-  height: 1px;
-  cursor: pointer;
-  animate: 0.2s;
-  background: transparent;
-  border-color: transparent;
-  color: transparent;
-}
-
-input[type=range]::-ms-fill-lower {
-  border: 1px solid @dark-brown;
-  border-radius: 8px;
-}
-
-input[type=range]::-ms-fill-upper {
-  border: 1px solid @dark-brown;
-  border-radius: 8px;
-}
-
-input[type=range]::-ms-thumb {
-  margin-top: 1px;
-  border: 1px solid @dark-brown;
-  height: 20px;
-  width: 20px;
-  border-radius: 20px;
-  cursor: pointer;
-}
-
-input[type=range]:focus::-ms-fill-lower {
-  background: #3071A9;
-}
-
-input[type=range]:focus::-ms-fill-upper {
-  background: #3071A9;
-}
 
   
