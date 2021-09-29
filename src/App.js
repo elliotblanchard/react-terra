@@ -76,9 +76,9 @@ export default function App() {
   let cameraZoom = 10.5 // Default
 
   if(getWindowDimensions().width < 1450) {
-    cameraZoom = 9.5 // Older laptops
+    cameraZoom = 8.5 // Older laptops
   } else if (getWindowDimensions().width < 400) {
-    cameraZoom = 8.5 // Phone in portrait mode
+    cameraZoom = 5.5 // Phone in portrait mode
   }
 
   let cameraArgs = { 
@@ -92,7 +92,8 @@ export default function App() {
     <>
       <div className='overlay' style={{filter: `brightness(${(2 - (1 * (state.timeOfDay/100)))})`}} >
         <header>
-          <h1>React Terrain</h1>          
+          <h1>React Terrain</h1> 
+          <h2>{cameraZoom}</h2>         
           <p>Sliders change seed values. Use mouse to zoom or rotate the landscape. Randomize generates new terrain.</p>
           <p>Built with React + React Three Fiber</p>
         </header>
