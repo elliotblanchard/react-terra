@@ -72,14 +72,28 @@ export default function App() {
     });
   };  
 
+  // Set zoom based on screen size
+  let cameraZoom = 10.5 // Default
+
+  if(getWindowDimensions().width < 1450) {
+    cameraZoom = 9.5 // Older laptops
+  } else if (getWindowDimensions().width < 400) {
+    cameraZoom = 8.5 // Phone in portrait mode
+  }
+
+  let cameraArgs = { 
+    far: 1000,
+    near: 0.01,  
+    position: [100, 100, 100], 
+    zoom: cameraZoom, 
+  }
+
   return (
     <>
       <div className='overlay' style={{filter: `brightness(${(2 - (1 * (state.timeOfDay/100)))})`}} >
         <header>
-          <h1>React Terrain</h1>
-          <h2>{getWindowDimensions().width}</h2>          
-          <p>The diamond-square - also known as cloud or plasma fractal algorithm - was first introduced by Fournier, Fussell and Carpenter at SIGGRAPH 1982</p>
-          <p>Adjust the sliders to change seed values. Use the mouse to zoom or rotate the landscape. Randomize to generate a new terrain.</p>
+          <h1>React Terrain</h1>          
+          <p>Sliders change seed values. Use mouse to zoom or rotate the landscape. Randomize generates new terrain.</p>
           <p>Built with React + React Three Fiber</p>
         </header>
         <main>
@@ -125,12 +139,7 @@ export default function App() {
         className='canvas'
         orthographic
         shadows      
-        camera={{ 
-          far: 1000,
-          near: 0.01,  
-          position: [100, 100, 100], 
-          zoom: 10.5, 
-        }}
+        camera={cameraArgs}
       >
         <color 
           args={[`hsl(
