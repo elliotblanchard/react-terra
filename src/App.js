@@ -80,7 +80,7 @@ export default function App() {
   } 
   
   if (getWindowDimensions().width < 800) {
-    cameraZoom = 7 // Phone in portrait mode
+    cameraZoom = 5.5 // Phone in portrait mode
   }
 
   let cameraArgs = { 
