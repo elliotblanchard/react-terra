@@ -93,6 +93,7 @@ export default function App() {
       <div className='overlay' style={{filter: `brightness(${(2 - (1 * (state.timeOfDay/100)))})`}} >
         <header>
           <h1>React Terrain</h1> 
+          <h2>{getWindowDimensions().width}</h2> 
           <h2>{cameraZoom}</h2>         
           <p>Sliders change seed values. Use mouse to zoom or rotate the landscape. Randomize generates new terrain.</p>
           <p>Built with React + React Three Fiber</p>
