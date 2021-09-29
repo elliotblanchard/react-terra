@@ -77,7 +77,7 @@ export default function App() {
 
   if(getWindowDimensions().width < 1450) {
     cameraZoom = 8.5 // Older laptops
-  } else if (getWindowDimensions().width < 400) {
+  } else if (getWindowDimensions().width < 800) {
     cameraZoom = 5.5 // Phone in portrait mode
   }
 
