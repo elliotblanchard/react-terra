@@ -75,11 +75,13 @@ export default function App() {
   // Set zoom based on screen size
   let cameraZoom = 10.5 // Default
 
-  if (getWindowDimensions().width < 800) {
-    cameraZoom = 7 // Phone in portrait mode
-  } else if(getWindowDimensions().width < 1450) {
+  if(getWindowDimensions().width < 1450) {
     cameraZoom = 8.5 // Older laptops
   } 
+  
+  if (getWindowDimensions().width < 800) {
+    cameraZoom = 7 // Phone in portrait mode
+  }
 
   let cameraArgs = { 
     far: 1000,
