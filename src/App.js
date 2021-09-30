@@ -3,26 +3,8 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { MapControls } from '@react-three/drei';
 import * as THREE from 'three';
 
-// import styles from './Terra.less';
-
 import Content from './Content';
 import Lights from './Lights';
-
-/*
-  Map generation:
-  - Diamond Square https://www.youtube.com/watch?v=4GuAV1PnurU
-
-  Vertex colors (for gradients): 
-  - https://codesandbox.io/s/8fo01?file=/src/index.js:2218-2222
-  - https://darrendev.blogspot.com/2016/03/gradients-in-threejs.html
-
-  https://react-spring.io/hooks/use-springs
-  https://codesandbox.io/s/worldgrid-0upfs
-  https://codesandbox.io/s/springy-boxes-forked-0upfs?file=/src/index.js
-  https://codesandbox.io/s/react-spring-animations-6hi1y?file=/src/Canvas.js
-  https://react-spring.io/basics
-  https://codesandbox.io/s/springy-boxes-jz9l97qn89
-*/
 
 function CameraTarget() {
   const lookAtCubePosition = new THREE.Vector3();
@@ -91,7 +73,7 @@ export default function App() {
     <>
       <div className='overlay' style={{filter: `brightness(${(2 - (1 * (state.timeOfDay/100)))})`}} >
         <header>
-          <h1>React Terrain</h1>         
+          <h1>React Terra</h1>         
           <p>Sliders change seed values. Use mouse to zoom or rotate the landscape. Randomize generates new terrain.</p>
           <p>Built with React + React Three Fiber</p>
         </header>
