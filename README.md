@@ -2,7 +2,7 @@
 
 ![react-terra-screenshot](https://user-images.githubusercontent.com/3344010/135370503-d908ece1-568d-4f85-bf69-1b3a7ded9939.png)
 
-I've recently been interested in procedural terrain algorithims. Since I've also been spending a lot of time in React, I thought I'd combine the two and take a dive into react-three-fiber, a React renderer for three.js    
+I've recently been interested in procedural terrain algorithims. Since I've also been spending a lot of time in React, I decided to take a dive into react-three-fiber, a React renderer for three.js    
 
 [React-Terra](https://condescending-allen-105b32.netlify.app) implements the Diamond Square height map algorithm. Diamond Square - also known as the cloud or plasma fractal algorithm - was first introduced by Fournier, Fussell and Carpenter at SIGGRAPH 1982
 
